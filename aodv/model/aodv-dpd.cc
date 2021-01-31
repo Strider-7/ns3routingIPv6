@@ -26,7 +26,7 @@ namespace ns3 {
 namespace aodv {
 
 bool
-DuplicatePacketDetection::IsDuplicate  (Ptr<const Packet> p, const Ipv4Header & header)
+DuplicatePacketDetection::IsDuplicate  (Ptr<const Packet> p, const Ipv6Header & header)
 {
   return m_idCache.IsDuplicate (header.GetSource (), p->GetUid () );
 }

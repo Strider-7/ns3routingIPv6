@@ -31,7 +31,7 @@
 #include <iostream>
 #include "ns3/header.h"
 #include "ns3/enum.h"
-#include "ns3/ipv4-address.h"
+#include "ns3/ipv6-address.h"
 #include <map>
 #include "ns3/nstime.h"
 
@@ -144,8 +144,8 @@ public:
    * \param originSeqNo the origin sequence number
    */
    RreqHeader (uint8_t flags = 0, uint8_t reserved = 0, uint8_t hopCount = 0,
-              uint32_t requestID = 0, Ipv4Address dst = Ipv4Address (),
-              uint32_t dstSeqNo = 0, Ipv4Address origin = Ipv4Address (),
+              uint32_t requestID = 0, Ipv6Address dst = Ipv6Address (),
+              uint32_t dstSeqNo = 0, Ipv6Address origin = Ipv6Address (),
               uint32_t originSeqNo = 0);
 
   /**
@@ -196,7 +196,7 @@ public:
    * \brief Set the destination address
    * \param a the destination address
    */
-  void SetDst (Ipv4Address a)
+  void SetDst (Ipv6Address a)
   {
     m_dst = a;
   }
@@ -204,7 +204,7 @@ public:
    * \brief Get the destination address
    * \return the destination address
    */
-  Ipv4Address GetDst () const
+  Ipv6Address GetDst () const
   {
     return m_dst;
   }
@@ -228,7 +228,7 @@ public:
    * \brief Set the origin address
    * \param a the origin address
    */
-  void SetOrigin (Ipv4Address a)
+  void SetOrigin (Ipv6Address a)
   {
     m_origin = a;
   }
@@ -236,7 +236,7 @@ public:
    * \brief Get the origin address
    * \return the origin address
    */
-  Ipv4Address GetOrigin () const
+  Ipv6Address GetOrigin () const
   {
     return m_origin;
   }
@@ -300,9 +300,9 @@ private:
   uint8_t        m_reserved;       ///< Not used (must be 0)
   uint8_t        m_hopCount;       ///< Hop Count
   uint32_t       m_requestID;      ///< RREQ ID
-  Ipv4Address    m_dst;            ///< Destination IP Address
+  Ipv6Address    m_dst;            ///< Destination IP Address
   uint32_t       m_dstSeqNo;       ///< Destination Sequence Number
-  Ipv4Address    m_origin;         ///< Originator IP Address
+  Ipv6Address    m_origin;         ///< Originator IP Address
   uint32_t       m_originSeqNo;    ///< Source Sequence Number
 };
 
@@ -345,9 +345,9 @@ public:
    * \param origin the origin IP address
    * \param lifetime the lifetime
    */
-  RrepHeader (uint8_t prefixSize = 0, uint8_t hopCount = 0, Ipv4Address dst =
-                Ipv4Address (), uint32_t dstSeqNo = 0, Ipv4Address origin =
-                Ipv4Address (), Time lifetime = MilliSeconds (0));
+  RrepHeader (uint8_t prefixSize = 0, uint8_t hopCount = 0, Ipv6Address dst =
+                Ipv6Address (), uint32_t dstSeqNo = 0, Ipv6Address origin =
+                Ipv6Address (), Time lifetime = MilliSeconds (0));
   /**
    * \brief Get the type ID.
    * \return the object TypeId
@@ -380,7 +380,7 @@ public:
    * \brief Set the destination address
    * \param a the destination address
    */
-  void SetDst (Ipv4Address a)
+  void SetDst (Ipv6Address a)
   {
     m_dst = a;
   }
@@ -388,7 +388,7 @@ public:
    * \brief Get the destination address
    * \return the destination address
    */
-  Ipv4Address GetDst () const
+  Ipv6Address GetDst () const
   {
     return m_dst;
   }
@@ -412,7 +412,7 @@ public:
    * \brief Set the origin address
    * \param a the origin address
    */
-  void SetOrigin (Ipv4Address a)
+  void SetOrigin (Ipv6Address a)
   {
     m_origin = a;
   }
@@ -420,7 +420,7 @@ public:
    * \brief Get the origin address
    * \return the origin address
    */
-  Ipv4Address GetOrigin () const
+  Ipv6Address GetOrigin () const
   {
     return m_origin;
   }
@@ -464,7 +464,7 @@ public:
    * \param srcSeqNo the source sequence number
    * \param lifetime the lifetime of the message
    */
-  void SetHello (Ipv4Address src, uint32_t srcSeqNo, Time lifetime);
+  void SetHello (Ipv6Address src, uint32_t srcSeqNo, Time lifetime);
 
   /**
    * \brief Comparison operator
@@ -476,9 +476,9 @@ private:
   uint8_t       m_flags;                  ///< A - acknowledgment required flag
   uint8_t       m_prefixSize;         ///< Prefix Size
   uint8_t             m_hopCount;         ///< Hop Count
-  Ipv4Address   m_dst;              ///< Destination IP Address
+  Ipv6Address   m_dst;              ///< Destination IP Address
   uint32_t      m_dstSeqNo;         ///< Destination Sequence Number
-  Ipv4Address     m_origin;           ///< Source IP Address
+  Ipv6Address     m_origin;           ///< Source IP Address
   uint32_t      m_lifeTime;         ///< Lifetime (in milliseconds)
 };
 
@@ -589,13 +589,13 @@ public:
    * \param seqNo unreachable sequence number
    * \return false if we already added maximum possible number of unreachable destinations
    */
-  bool AddUnDestination (Ipv4Address dst, uint32_t seqNo);
+  bool AddUnDestination (Ipv6Address dst, uint32_t seqNo);
   /**
    * \brief Delete pair (address + sequence number) from REER header, if the number of unreachable destinations > 0
    * \param un unreachable pair (address + sequence number)
    * \return true on success
    */
-  bool RemoveUnDestination (std::pair<Ipv4Address, uint32_t> & un);
+  bool RemoveUnDestination (std::pair<Ipv6Address, uint32_t> & un);
   /// Clear header
   void Clear ();
   /**
@@ -617,7 +617,7 @@ private:
   uint8_t m_reserved;        ///< Not used (must be 0)
 
   /// List of Unreachable destination: IP addresses and sequence numbers
-  std::map<Ipv4Address, uint32_t> m_unreachableDstSeqNo;
+  std::map<Ipv6Address, uint32_t> m_unreachableDstSeqNo;
 };
 
 /**

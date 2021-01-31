@@ -139,8 +139,8 @@ operator<< (std::ostream & os, TypeHeader const & h)
 //-----------------------------------------------------------------------------
 // RREQ
 //-----------------------------------------------------------------------------
-RreqHeader::RreqHeader (uint8_t flags, uint8_t reserved, uint8_t hopCount, uint32_t requestID, Ipv4Address dst,
-                        uint32_t dstSeqNo, Ipv4Address origin, uint32_t originSeqNo)
+RreqHeader::RreqHeader (uint8_t flags, uint8_t reserved, uint8_t hopCount, uint32_t requestID, Ipv6Address dst,
+                        uint32_t dstSeqNo, Ipv6Address origin, uint32_t originSeqNo)
   : m_flags (flags),
     m_reserved (reserved),
     m_hopCount (hopCount),
@@ -211,8 +211,8 @@ RreqHeader::Deserialize (Buffer::Iterator start)
 void
 RreqHeader::Print (std::ostream &os) const
 {
-  os << "RREQ ID " << m_requestID << " destination: ipv4 " << m_dst
-     << " sequence number " << m_dstSeqNo << " source: ipv4 "
+  os << "RREQ ID " << m_requestID << " destination: Ipv6 " << m_dst
+     << " sequence number " << m_dstSeqNo << " source: Ipv6 "
      << m_origin << " sequence number " << m_originSeqNo
      << " flags:" << " Gratuitous RREP " << (*this).GetGratuitousRrep ()
      << " Destination only " << (*this).GetDestinationOnly ()
@@ -296,8 +296,8 @@ RreqHeader::operator== (RreqHeader const & o) const
 // RREP
 //-----------------------------------------------------------------------------
 
-RrepHeader::RrepHeader (uint8_t prefixSize, uint8_t hopCount, Ipv4Address dst,
-                        uint32_t dstSeqNo, Ipv4Address origin, Time lifeTime)
+RrepHeader::RrepHeader (uint8_t prefixSize, uint8_t hopCount, Ipv6Address dst,
+                        uint32_t dstSeqNo, Ipv6Address origin, Time lifeTime)
   : m_flags (0),
     m_prefixSize (prefixSize),
     m_hopCount (hopCount),
@@ -366,12 +366,12 @@ RrepHeader::Deserialize (Buffer::Iterator start)
 void
 RrepHeader::Print (std::ostream &os) const
 {
-  os << "destination: ipv4 " << m_dst << " sequence number " << m_dstSeqNo;
+  os << "destination: Ipv6 " << m_dst << " sequence number " << m_dstSeqNo;
   if (m_prefixSize != 0)
     {
       os << " prefix size " << m_prefixSize;
     }
-  os << " source ipv4 " << m_origin << " lifetime " << m_lifeTime
+  os << " source Ipv6 " << m_origin << " lifetime " << m_lifeTime
      << " acknowledgment required flag " << (*this).GetAckRequired ();
 }
 
@@ -428,7 +428,7 @@ RrepHeader::operator== (RrepHeader const & o) const
 }
 
 void
-RrepHeader::SetHello (Ipv4Address origin, uint32_t srcSeqNo, Time lifetime)
+RrepHeader::SetHello (Ipv6Address origin, uint32_t srcSeqNo, Time lifetime)
 {
   m_flags = 0;
   m_prefixSize = 0;
@@ -554,7 +554,7 @@ RerrHeader::Serialize (Buffer::Iterator i ) const
   i.WriteU8 (m_flag);
   i.WriteU8 (m_reserved);
   i.WriteU8 (GetDestCount ());
-  std::map<Ipv4Address, uint32_t>::const_iterator j;
+  std::map<Ipv6Address, uint32_t>::const_iterator j;
   for (j = m_unreachableDstSeqNo.begin (); j != m_unreachableDstSeqNo.end (); ++j)
     {
       WriteTo (i, (*j).first);
@@ -570,7 +570,7 @@ RerrHeader::Deserialize (Buffer::Iterator start )
   m_reserved = i.ReadU8 ();
   uint8_t dest = i.ReadU8 ();
   m_unreachableDstSeqNo.clear ();
-  Ipv4Address address;
+  Ipv6Address address;
   uint32_t seqNo;
   for (uint8_t k = 0; k < dest; ++k)
     {
@@ -587,8 +587,8 @@ RerrHeader::Deserialize (Buffer::Iterator start )
 void
 RerrHeader::Print (std::ostream &os ) const
 {
-  os << "Unreachable destination (ipv4 address, seq. number):";
-  std::map<Ipv4Address, uint32_t>::const_iterator j;
+  os << "Unreachable destination (Ipv6 address, seq. number):";
+  std::map<Ipv6Address, uint32_t>::const_iterator j;
   for (j = m_unreachableDstSeqNo.begin (); j != m_unreachableDstSeqNo.end (); ++j)
     {
       os << (*j).first << ", " << (*j).second;
@@ -616,7 +616,7 @@ RerrHeader::GetNoDelete () const
 }
 
 bool
-RerrHeader::AddUnDestination (Ipv4Address dst, uint32_t seqNo )
+RerrHeader::AddUnDestination (Ipv6Address dst, uint32_t seqNo )
 {
   if (m_unreachableDstSeqNo.find (dst) != m_unreachableDstSeqNo.end ())
     {
@@ -629,13 +629,13 @@ RerrHeader::AddUnDestination (Ipv4Address dst, uint32_t seqNo )
 }
 
 bool
-RerrHeader::RemoveUnDestination (std::pair<Ipv4Address, uint32_t> & un )
+RerrHeader::RemoveUnDestination (std::pair<Ipv6Address, uint32_t> & un )
 {
   if (m_unreachableDstSeqNo.empty ())
     {
       return false;
     }
-  std::map<Ipv4Address, uint32_t>::iterator i = m_unreachableDstSeqNo.begin ();
+  std::map<Ipv6Address, uint32_t>::iterator i = m_unreachableDstSeqNo.begin ();
   un = *i;
   m_unreachableDstSeqNo.erase (i);
   return true;
@@ -657,8 +657,8 @@ RerrHeader::operator== (RerrHeader const & o ) const
       return false;
     }
 
-  std::map<Ipv4Address, uint32_t>::const_iterator j = m_unreachableDstSeqNo.begin ();
-  std::map<Ipv4Address, uint32_t>::const_iterator k = o.m_unreachableDstSeqNo.begin ();
+  std::map<Ipv6Address, uint32_t>::const_iterator j = m_unreachableDstSeqNo.begin ();
+  std::map<Ipv6Address, uint32_t>::const_iterator k = o.m_unreachableDstSeqNo.begin ();
   for (uint8_t i = 0; i < GetDestCount (); ++i)
     {
       if ((j->first != k->first) || (j->second != k->second))

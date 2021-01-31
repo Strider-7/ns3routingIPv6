@@ -31,7 +31,7 @@
 namespace ns3 {
 namespace aodv {
 bool
-IdCache::IsDuplicate (Ipv4Address addr, uint32_t id)
+IdCache::IsDuplicate (Ipv6Address addr, uint32_t id)
 {
   Purge ();
   for (std::vector<UniqueId>::const_iterator i = m_idCache.begin ();

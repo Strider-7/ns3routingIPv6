@@ -45,7 +45,7 @@ Neighbors::Neighbors (Time delay)
 }
 
 bool
-Neighbors::IsNeighbor (Ipv4Address addr)
+Neighbors::IsNeighbor (Ipv6Address addr)
 {
   Purge ();
   for (std::vector<Neighbor>::const_iterator i = m_nb.begin ();
@@ -60,7 +60,7 @@ Neighbors::IsNeighbor (Ipv4Address addr)
 }
 
 Time
-Neighbors::GetExpireTime (Ipv4Address addr)
+Neighbors::GetExpireTime (Ipv6Address addr)
 {
   Purge ();
   for (std::vector<Neighbor>::const_iterator i = m_nb.begin (); i
@@ -75,7 +75,7 @@ Neighbors::GetExpireTime (Ipv4Address addr)
 }
 
 void
-Neighbors::Update (Ipv4Address addr, Time expire)
+Neighbors::Update (Ipv6Address addr, Time expire)
 {
   for (std::vector<Neighbor>::iterator i = m_nb.begin (); i != m_nb.end (); ++i)
     {
@@ -159,7 +159,7 @@ Neighbors::DelArpCache (Ptr<ArpCache> a)
 }
 
 Mac48Address
-Neighbors::LookupMacAddress (Ipv4Address addr)
+Neighbors::LookupMacAddress (Ipv6Address addr)
 {
   Mac48Address hwaddr;
   for (std::vector<Ptr<ArpCache> >::const_iterator i = m_arp.begin ();

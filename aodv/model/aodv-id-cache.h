@@ -29,7 +29,7 @@
 #ifndef AODV_ID_CACHE_H
 #define AODV_ID_CACHE_H
 
-#include "ns3/ipv4-address.h"
+#include "ns3/ipv6-address.h"
 #include "ns3/simulator.h"
 #include <vector>
 
@@ -56,7 +56,7 @@ public:
    * \param id the cache entry ID
    * \returns true if the pair exists
    */ 
-  bool IsDuplicate (Ipv4Address addr, uint32_t id);
+  bool IsDuplicate (Ipv6Address addr, uint32_t id);
   /// Remove all expired entries
   void Purge ();
   /**
@@ -84,7 +84,7 @@ private:
   struct UniqueId
   {
     /// ID is supposed to be unique in single address context (e.g. sender address)
-    Ipv4Address m_context;
+    Ipv6Address m_context;
     /// The id
     uint32_t m_id;
     /// When record will expire

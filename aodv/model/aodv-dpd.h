@@ -26,7 +26,7 @@
 #include "aodv-id-cache.h"
 #include "ns3/nstime.h"
 #include "ns3/packet.h"
-#include "ns3/ipv4-header.h"
+#include "ns3/ipv6-header.h"
 
 namespace ns3 {
 namespace aodv {
@@ -54,7 +54,7 @@ public:
    * \param header the IP header to check
    * \returns true if duplicate
    */
-  bool IsDuplicate (Ptr<const Packet> p, const Ipv4Header & header);
+  bool IsDuplicate (Ptr<const Packet> p, const Ipv6Header & header);
   /**
    * Set duplicate record lifetime
    * \param lifetime the lifetime for duplicate records
