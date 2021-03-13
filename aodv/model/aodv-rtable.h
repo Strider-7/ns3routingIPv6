@@ -25,6 +25,7 @@
  * Authors: Elena Buchatskaia <borovkovaes@iitp.ru>
  *          Pavel Boyko <boyko@iitp.ru>
  */
+//comment
 #ifndef AODV_RTABLE_H
 #define AODV_RTABLE_H
 
